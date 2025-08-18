@@ -101,6 +101,7 @@ const FileUpload = ({
       );
 
       setUploadedFiles((prev) => [...prev, result]);
+      return true;
     } catch (error) {
       console.error("Upload failed:", error);
 
@@ -116,6 +117,7 @@ const FileUpload = ({
             : f
         )
       );
+      return false;
     }
   };
 
@@ -132,16 +134,18 @@ const FileUpload = ({
       return;
     }
 
+    let successCount = 0;
+
     for (let i = 0; i < filesToUpload.length; i++) {
-      await uploadFile(filesToUpload[i]);
+      const success = await uploadFile(filesToUpload[i]);
+      if (success) successCount++;
       setUploadProgress(((i + 1) / filesToUpload.length) * 100);
     }
 
     setUploading(false);
 
     // If all uploads successful, close dialog
-    const hasErrors = files.some((f) => f.error);
-    if (!hasErrors && uploadedFiles.length > 0) {
+    if (successCount === filesToUpload.length && filesToUpload.length > 0) {
       setTimeout(() => {
         handleClose();
         onUploadSuccess();
