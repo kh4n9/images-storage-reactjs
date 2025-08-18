@@ -99,6 +99,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (data) => {
+    try {
+      setLoading(true);
+      const response = await authAPI.updateProfile(data);
+      const { user: updatedUser } = response;
+      Cookies.set("user_data", JSON.stringify(updatedUser), { expires: 1 });
+      setUser(updatedUser);
+      return { success: true, user: updatedUser };
+    } catch (error) {
+      console.error("Update profile failed:", error);
+      return {
+        success: false,
+        error: error.response?.data?.message || "Update failed",
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     Cookies.remove("auth_token");
     Cookies.remove("user_data");
@@ -112,6 +131,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     register,
+    updateProfile,
     logout,
   };
 
