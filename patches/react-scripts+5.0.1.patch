@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
+index e465d8e..3338967 100644
+--- a/node_modules/react-scripts/config/webpack.config.js
++++ b/node_modules/react-scripts/config/webpack.config.js
+@@ -158,19 +158,19 @@ module.exports = function (webpackEnv) {
+                   // which in turn let's users customize the target behavior as per their needs.
+                   'postcss-normalize',
+                 ]
+-              : [
+-                  'tailwindcss',
+-                  'postcss-flexbugs-fixes',
+-                  [
+-                    'postcss-preset-env',
+-                    {
+-                      autoprefixer: {
+-                        flexbox: 'no-2009',
++                : [
++                    '@tailwindcss/postcss',
++                    'postcss-flexbugs-fixes',
++                    [
++                      'postcss-preset-env',
++                      {
++                        autoprefixer: {
++                          flexbox: 'no-2009',
++                        },
++                        stage: 3,
+                       },
+-                      stage: 3,
+-                    },
++                    ],
+                   ],
+-                ],
+           },
+           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+         },
