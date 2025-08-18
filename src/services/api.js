@@ -53,6 +53,11 @@ export const authAPI = {
     const response = await api.get("/auth/profile");
     return response.data;
   },
+
+  updateProfile: async (data) => {
+    const response = await api.patch("/auth/profile", data);
+    return response.data;
+  },
 };
 
 // Files API
@@ -164,6 +169,17 @@ export const foldersAPI = {
 
   deleteFolder: async (folderId) => {
     const response = await api.delete(`/folders/${folderId}`);
+    return response.data;
+  },
+};
+
+export const usersAPI = {
+  getAllUsers: async () => {
+    const response = await api.get("/users");
+    return response.data;
+  },
+  updateUser: async (userId, data) => {
+    const response = await api.patch(`/users/${userId}`, data);
     return response.data;
   },
 };

@@ -328,6 +328,26 @@ const Dashboard = () => {
               <AccountCircle sx={{ mr: 1 }} />
               {user?.name}
             </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                navigate("/account");
+              }}
+            >
+              <AccountCircle sx={{ mr: 1 }} />
+              Account Settings
+            </MenuItem>
+            {user?.role === "admin" && (
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  navigate("/admin");
+                }}
+              >
+                <DashboardIcon sx={{ mr: 1 }} />
+                Admin Panel
+              </MenuItem>
+            )}
             <MenuItem onClick={handleLogout}>
               <ExitToApp sx={{ mr: 1 }} />
               Logout
