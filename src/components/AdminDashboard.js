@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { usersAPI } from "../services/api";
+import { usersAPI } from "../services/users";
 import {
   Alert,
   Box,
