@@ -21,7 +21,7 @@ const AdminRoute = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated || user?.role !== "admin") {
+  if (!isAuthenticated || !user?.roles?.includes("admin")) {
     return <Navigate to="/dashboard" replace />;
   }
 

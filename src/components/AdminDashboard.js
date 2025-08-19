@@ -15,6 +15,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 
 const AdminDashboard = () => {
@@ -36,16 +38,16 @@ const AdminDashboard = () => {
     loadUsers();
   }, []);
 
-  const handleRoleChange = (id, role) => {
+  const handleRolesChange = (id, roles) => {
     setUsers((prev) =>
-      prev.map((u) => (u.id === id ? { ...u, role } : u))
+      prev.map((u) => (u.id === id ? { ...u, roles } : u))
     );
   };
 
   const handleUpdate = async (id) => {
     const user = users.find((u) => u.id === id);
     try {
-      await usersAPI.updateUser(id, { role: user.role });
+      await usersAPI.updateUser(id, { roles: user.roles });
       setMessage("User updated successfully");
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -77,7 +79,7 @@ const AdminDashboard = () => {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
+                <TableCell>Roles</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -90,12 +92,18 @@ const AdminDashboard = () => {
                   <TableCell>{u.email}</TableCell>
                   <TableCell>
                     <Select
-                      value={u.role}
-                      onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                      multiple
+                      value={u.roles || []}
+                      onChange={(e) => handleRolesChange(u.id, e.target.value)}
                       size="small"
+                      renderValue={(selected) => selected.join(", ")}
                     >
-                      <MenuItem value="user">user</MenuItem>
-                      <MenuItem value="admin">admin</MenuItem>
+                      {['user', 'admin'].map((role) => (
+                        <MenuItem key={role} value={role}>
+                          <Checkbox checked={u.roles?.includes(role)} />
+                          <ListItemText primary={role} />
+                        </MenuItem>
+                      ))}
                     </Select>
                   </TableCell>
                   <TableCell align="right">

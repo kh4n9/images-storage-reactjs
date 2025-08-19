@@ -337,7 +337,7 @@ const Dashboard = () => {
               <AccountCircle sx={{ mr: 1 }} />
               Account Settings
             </MenuItem>
-            {user?.role === "admin" && (
+            {user?.roles?.includes("admin") && (
               <MenuItem
                 onClick={() => {
                   handleMenuClose();
