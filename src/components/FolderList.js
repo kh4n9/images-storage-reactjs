@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   List,
   ListItem,
@@ -32,7 +32,7 @@ import {
 } from "@mui/icons-material";
 import { foldersAPI } from "../services/api";
 
-const FolderList = ({
+const FolderListComponent = ({
   folders,
   onFolderClick,
   currentFolder,
@@ -325,4 +325,4 @@ const FolderList = ({
   );
 };
 
-export default FolderList;
+export default memo(FolderListComponent);
