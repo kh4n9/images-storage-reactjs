@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,14 +6,15 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { CssBaseline, Box } from "@mui/material";
+import { CssBaseline, Box, CircularProgress } from "@mui/material";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LoginPage from "./components/LoginPage";
-import Dashboard from "./components/Dashboard";
-import AccountSettings from "./components/AccountSettings";
-import AdminDashboard from "./components/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
+
+const LoginPage = lazy(() => import("./components/LoginPage"));
+const Dashboard = lazy(() => import("./components/Dashboard"));
+const AccountSettings = lazy(() => import("./components/AccountSettings"));
+const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
 
 const theme = createTheme({
   palette: {
@@ -88,34 +89,42 @@ function App() {
       <AuthProvider>
         <Router>
           <Box sx={{ minHeight: "100vh" }}>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/account"
-                element={
-                  <ProtectedRoute>
-                    <AccountSettings />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                }
-              />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
+            <Suspense
+              fallback={
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/account"
+                  element={
+                    <ProtectedRoute>
+                      <AccountSettings />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </Suspense>
           </Box>
         </Router>
       </AuthProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Grid,
   Card,
@@ -29,7 +29,7 @@ import {
 } from "@mui/icons-material";
 import { filesAPI } from "../services/api";
 
-const FileGrid = ({ files, loading, onFileDelete }) => {
+const FileGridComponent = ({ files, loading, onFileDelete }) => {
   const [previewFile, setPreviewFile] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const theme = useTheme();
@@ -397,4 +397,4 @@ const FileGrid = ({ files, loading, onFileDelete }) => {
   );
 };
 
-export default FileGrid;
+export default memo(FileGridComponent);
