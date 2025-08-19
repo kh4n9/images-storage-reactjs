@@ -38,16 +38,16 @@ const AdminDashboard = () => {
     loadUsers();
   }, []);
 
-  const handleRolesChange = (id, roles) => {
+  const handleRolesChange = (userId, roles) => {
     setUsers((prev) =>
-      prev.map((u) => (u.id === id ? { ...u, roles } : u))
+      prev.map((u) => (u._id === userId ? { ...u, roles } : u))
     );
   };
 
-  const handleUpdate = async (id) => {
-    const user = users.find((u) => u.id === id);
+  const handleUpdate = async (userId) => {
+    const user = users.find((u) => u._id === userId);
     try {
-      await usersAPI.updateUser(id, { roles: user.roles });
+      await usersAPI.updateUser(userId, { roles: user.roles });
       setMessage("User updated successfully");
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
             </TableHead>
             <TableBody>
               {users.map((u) => (
-                <TableRow key={u.id}>
+                <TableRow key={u._id}>
                   <TableCell>
                     <Typography fontWeight={500}>{u.name}</Typography>
                   </TableCell>
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
                     <Select
                       multiple
                       value={u.roles || []}
-                      onChange={(e) => handleRolesChange(u.id, e.target.value)}
+                      onChange={(e) => handleRolesChange(u._id, e.target.value)}
                       size="small"
                       renderValue={(selected) => selected.join(", ")}
                     >
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
                     <Button
                       variant="contained"
                       size="small"
-                      onClick={() => handleUpdate(u.id)}
+                      onClick={() => handleUpdate(u._id)}
                     >
                       Save
                     </Button>
