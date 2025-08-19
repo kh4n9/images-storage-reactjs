@@ -24,20 +24,18 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     try {
       const token = Cookies.get("auth_token");
-      const userData = Cookies.get("user_data");
+      if (!token) {
+        return;
+      }
 
-      if (token && userData) {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
+      try {
+        const profile = await authAPI.getProfile();
+        const currentUser = profile.user || profile;
+        Cookies.set("user_data", JSON.stringify(currentUser), { expires: 1 });
+        setUser(currentUser);
         setIsAuthenticated(true);
-
-        // Verify token is still valid
-        try {
-          await authAPI.getProfile();
-        } catch (error) {
-          // Token is invalid, logout
-          logout();
-        }
+      } catch (error) {
+        logout();
       }
     } catch (error) {
       console.error("Auth check failed:", error);
@@ -51,11 +49,12 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await authAPI.login(email, password);
+      const { access_token } = response;
 
-      const { user: userData, access_token } = response;
-
-      // Store in cookies
       Cookies.set("auth_token", access_token, { expires: 1 }); // 1 day
+
+      const profile = await authAPI.getProfile();
+      const userData = profile.user || profile;
       Cookies.set("user_data", JSON.stringify(userData), { expires: 1 });
 
       setUser(userData);
@@ -77,11 +76,12 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await authAPI.register(email, name, password);
+      const { access_token } = response;
 
-      const { user: userData, access_token } = response;
-
-      // Store in cookies
       Cookies.set("auth_token", access_token, { expires: 1 });
+
+      const profile = await authAPI.getProfile();
+      const userData = profile.user || profile;
       Cookies.set("user_data", JSON.stringify(userData), { expires: 1 });
 
       setUser(userData);
