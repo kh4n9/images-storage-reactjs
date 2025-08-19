@@ -8,11 +8,13 @@ import {
   CardContent,
   CardHeader,
   TextField,
-  Typography,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const AccountSettings = () => {
   const { user, updateProfile } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -49,7 +51,17 @@ const AccountSettings = () => {
       }}
     >
       <Card sx={{ width: "100%", maxWidth: 400 }}>
-        <CardHeader title="Account Settings" />
+        <CardHeader
+          title="Account Settings"
+          action={
+            <Button
+              startIcon={<ArrowBack />}
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </Button>
+          }
+        />
         <CardContent>
           <Box
             component="form"
