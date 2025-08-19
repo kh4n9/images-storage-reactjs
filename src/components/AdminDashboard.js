@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { usersAPI } from "../services/api";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+} from "@mui/material";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -21,34 +27,44 @@ const AdminDashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return <Box p={2}>Loading...</Box>;
   }
 
   return (
-    <div className="min-h-screen p-4 bg-gray-50">
-      <Card className="max-w-3xl mx-auto">
-        <CardHeader>
-          <CardTitle>User Management</CardTitle>
-        </CardHeader>
+    <Box sx={{ minHeight: "100vh", p: 2, backgroundColor: "#f8fafc" }}>
+      <Card sx={{ maxWidth: 800, mx: "auto" }}>
+        <CardHeader title="User Management" />
         <CardContent>
-          <div className="space-y-2">
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {users.map((u) => (
-              <div
+              <Box
                 key={u.id}
-                className="flex items-center justify-between border rounded p-2"
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  p: 1,
+                }}
               >
-                <div>
-                  <p className="font-medium">{u.name}</p>
-                  <p className="text-sm text-gray-500">{u.email}</p>
-                </div>
-                <div className="text-sm capitalize">{u.role}</div>
-              </div>
+                <Box>
+                  <Typography fontWeight={500}>{u.name}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {u.email}
+                  </Typography>
+                </Box>
+                <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
+                  {u.role}
+                </Typography>
+              </Box>
             ))}
-          </div>
+          </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
 
 export default AdminDashboard;
+

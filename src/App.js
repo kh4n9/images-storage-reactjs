@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Box } from "@mui/material";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./components/LoginPage";
@@ -87,7 +87,7 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Router>
-          <div className="min-h-screen">
+          <Box sx={{ minHeight: "100vh" }}>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route
@@ -116,7 +116,7 @@ function App() {
               />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Routes>
-          </div>
+          </Box>
         </Router>
       </AuthProvider>
     </ThemeProvider>
