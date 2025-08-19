@@ -14,7 +14,6 @@ import Dashboard from "./components/Dashboard";
 import AccountSettings from "./components/AccountSettings";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
-import "./styles/modern.css";
 
 const theme = createTheme({
   palette: {
@@ -88,7 +87,7 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Router>
-          <div className="App slide-in">
+          <div className="min-h-screen">
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route
