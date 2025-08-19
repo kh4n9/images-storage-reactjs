@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const AccountSettings = () => {
   const { user, updateProfile } = useAuth();
@@ -32,43 +38,59 @@ const AccountSettings = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Account Settings</CardTitle>
-        </CardHeader>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        p: 2,
+      }}
+    >
+      <Card sx={{ width: "100%", maxWidth: 400 }}>
+        <CardHeader title="Account Settings" />
         <CardContent>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            {message && <p className="text-sm text-green-500">{message}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          >
+            <TextField
+              id="name"
+              name="name"
+              label="Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <TextField
+              id="email"
+              name="email"
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            {message && (
+              <Alert
+                severity={
+                  message === "Profile updated successfully" ? "success" : "error"
+                }
+              >
+                {message}
+              </Alert>
+            )}
+            <Button type="submit" variant="contained" fullWidth disabled={loading}>
               {loading ? "Saving..." : "Save"}
             </Button>
-          </form>
+          </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
 
 export default AccountSettings;
+
