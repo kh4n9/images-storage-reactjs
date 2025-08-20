@@ -52,6 +52,7 @@ import FolderList from "./FolderList";
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const userId = user?._id || user?.id;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -73,11 +74,11 @@ const Dashboard = () => {
       setLoading(true);
 
       // Load user root folders with file count
-      const rootFolders = await foldersAPI.getUserRootFoldersWithCount(user.id);
+      const rootFolders = await foldersAPI.getUserRootFoldersWithCount(userId);
       setFolders(rootFolders);
 
       // Load user files (root level)
-      const userFiles = await filesAPI.getUserFiles(user.id);
+      const userFiles = await filesAPI.getUserFiles(userId);
       setFiles(userFiles.filter((file) => !file.folder)); // Only root files
     } catch (error) {
       console.error("Failed to load user data:", error);
@@ -164,7 +165,7 @@ const Dashboard = () => {
       setFolders(subfolders);
     } else {
       // Reload root folders
-      const rootFolders = await foldersAPI.getUserRootFoldersWithCount(user.id);
+      const rootFolders = await foldersAPI.getUserRootFoldersWithCount(userId);
       setFolders(rootFolders);
     }
   };
@@ -177,7 +178,7 @@ const Dashboard = () => {
         setFiles(folderFiles);
       } else {
         // Reload root files
-        const userFiles = await filesAPI.getUserFiles(user.id);
+        const userFiles = await filesAPI.getUserFiles(userId);
         setFiles(userFiles.filter((file) => !file.folder)); // Only root files
       }
     } catch (error) {
@@ -617,7 +618,7 @@ const Dashboard = () => {
         onClose={() => setUploadDialogOpen(false)}
         onUploadSuccess={handleUploadSuccess}
         currentFolder={currentFolder}
-        userId={user?.id}
+        userId={userId}
       />
     </Box>
   );
