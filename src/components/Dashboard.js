@@ -52,7 +52,9 @@ import FolderList from "./FolderList";
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const userId = user?._id || user?.id;
+  // Ensure we always work with a string user id
+  const userId =
+    typeof user?._id === "object" ? user?._id?.$oid : user?._id || user?.id;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -63,13 +65,15 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 
+  // Load user data only when we have a valid user id
   useEffect(() => {
-    if (user) {
+    if (userId) {
       loadUserData();
     }
-  }, [user]);
+  }, [userId]);
 
   const loadUserData = async () => {
+    if (!userId) return;
     try {
       setLoading(true);
 
@@ -165,8 +169,10 @@ const Dashboard = () => {
       setFolders(subfolders);
     } else {
       // Reload root folders
-      const rootFolders = await foldersAPI.getUserRootFoldersWithCount(userId);
-      setFolders(rootFolders);
+      if (userId) {
+        const rootFolders = await foldersAPI.getUserRootFoldersWithCount(userId);
+        setFolders(rootFolders);
+      }
     }
   };
 
@@ -178,8 +184,10 @@ const Dashboard = () => {
         setFiles(folderFiles);
       } else {
         // Reload root files
-        const userFiles = await filesAPI.getUserFiles(userId);
-        setFiles(userFiles.filter((file) => !file.folder)); // Only root files
+        if (userId) {
+          const userFiles = await filesAPI.getUserFiles(userId);
+          setFiles(userFiles.filter((file) => !file.folder)); // Only root files
+        }
       }
     } catch (error) {
       console.error("Failed to reload files:", error);
