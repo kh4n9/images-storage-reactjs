@@ -50,7 +50,7 @@ import FileGrid from "./FileGrid";
 import FolderList from "./FolderList";
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   // Ensure we always work with a string user id
   const userId =
@@ -65,12 +65,12 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 
-  // Load user data only when we have a valid user id
+  // Load user data when authentication status or user id changes
   useEffect(() => {
-    if (userId) {
+    if (isAuthenticated && userId) {
       loadUserData();
     }
-  }, [userId]);
+  }, [isAuthenticated, userId]);
 
   const loadUserData = async () => {
     if (!userId) return;
