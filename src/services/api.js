@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_BASE_URL = "https://images-storage-nestjs-production.up.railway.app/"; // Backend URL
+const API_BASE_URL = "https://images-storage-nestjs-production.up.railway.app"; // Backend URL without trailing slash
 
 // Create axios instance
 const api = axios.create({
