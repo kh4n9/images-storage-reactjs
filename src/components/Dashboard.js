@@ -4,7 +4,7 @@ import Header from './Header';
 import FolderTree from './FolderTree';
 import FileList from './FileList';
 import { AuthContext } from '../contexts/AuthContext';
-import { fetchFolderFiles } from '../services/api';
+import { fetchFolderFiles, fetchUserFiles } from '../services/api';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -14,8 +14,12 @@ const Dashboard = () => {
   useEffect(() => {
     if (currentFolder) {
       fetchFolderFiles(currentFolder.id).then(setFiles);
+    } else if (user) {
+      fetchUserFiles(user.id).then((data) =>
+        setFiles(data.filter((file) => !file.folderId))
+      );
     }
-  }, [currentFolder]);
+  }, [currentFolder, user]);
 
   const handleFileDeleted = (id) => {
     setFiles((prev) => prev.filter((file) => file.id !== id));
@@ -30,7 +34,7 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={9}>
           <Box p={2}>
-            <Typography variant="h6">{currentFolder ? currentFolder.name : 'Select a folder'}</Typography>
+            <Typography variant="h6">{currentFolder ? currentFolder.name : 'Root'}</Typography>
             <FileList files={files} onDelete={handleFileDeleted} />
           </Box>
         </Grid>

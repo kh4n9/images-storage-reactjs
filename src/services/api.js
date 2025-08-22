@@ -52,6 +52,8 @@ export const fetchFolders = (userId) => request(`/folders/user/${userId}`);
 
 export const fetchFolderFiles = (folderId) => request(`/folders/${folderId}/files`);
 
+export const fetchUserFiles = (userId) => request(`/files/user/${userId}`);
+
 export const createFolder = (name, parentId) =>
   request('/folders', {
     method: 'POST',
