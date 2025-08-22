@@ -77,6 +77,11 @@ export const filesAPI = {
     return response.data;
   },
 
+  getAllFiles: async () => {
+    const response = await api.get("/files");
+    return response.data;
+  },
+
   getFileById: async (fileId) => {
     const response = await api.get(`/files/${fileId}`);
     return response.data;
