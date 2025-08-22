@@ -17,6 +17,10 @@ const Dashboard = () => {
     }
   }, [currentFolder]);
 
+  const handleFileDeleted = (id) => {
+    setFiles((prev) => prev.filter((file) => file.id !== id));
+  };
+
   return (
     <Box>
       <Header />
@@ -27,7 +31,7 @@ const Dashboard = () => {
         <Grid item xs={9}>
           <Box p={2}>
             <Typography variant="h6">{currentFolder ? currentFolder.name : 'Select a folder'}</Typography>
-            <FileList files={files} />
+            <FileList files={files} onDelete={handleFileDeleted} />
           </Box>
         </Grid>
       </Grid>
