@@ -1,13 +1,25 @@
+import Cookies from 'js-cookie';
+
 const API_URL =
   process.env.REACT_APP_API_URL ||
   'https://images-storage-nestjs-production.up.railway.app';
 
 const request = async (url, options = {}) => {
+  const token = Cookies.get('jwt');
+  const headers = {
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
   const res = await fetch(`${API_URL}${url}`, {
     credentials: 'include',
     ...options,
+    headers,
   });
   if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error('Unauthorized');
+    }
     throw new Error('API error');
   }
   return res.json();
