@@ -73,7 +73,7 @@ src/
 
 ## API Integration
 
-Backend URL: `http://localhost:3000`
+Backend URL: `https://images-storage-nestjs-production.up.railway.app`
 
 ### Endpoints được sử dụng:
 
