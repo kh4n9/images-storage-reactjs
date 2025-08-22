@@ -1,12 +1,48 @@
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
+const request = async (url, options = {}) => {
+  const res = await fetch(`${API_URL}${url}`, {
+    credentials: 'include',
+    ...options,
+  });
+  if (!res.ok) {
+    throw new Error('API error');
+  }
+  return res.json();
+};
+
+export const login = (email, password) =>
+  request('/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+export const register = (data) =>
+  request('/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const getProfile = () => request('/auth/profile');
+
+export const updateProfile = (data) =>
+  request('/auth/profile', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const fetchFolders = (userId) => request(`/folders/user/${userId}`);
+
+export const fetchFolderFiles = (folderId) => request(`/folders/${folderId}/files`);
+
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('image', file);
-  const response = await fetch('/upload', {
+  return request('/files/upload', {
     method: 'POST',
     body: formData,
   });
-  if (!response.ok) {
-    throw new Error('Upload failed');
-  }
-  return response.json();
 };
