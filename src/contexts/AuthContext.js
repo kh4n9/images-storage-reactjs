@@ -21,11 +21,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const data = await apiLogin(email, password);
+    Cookies.set('jwt', data.access_token);
     setUser(data.user);
   };
 
   const register = async (info) => {
     const data = await apiRegister(info);
+    Cookies.set('jwt', data.access_token);
     setUser(data.user);
   };
 
