@@ -38,6 +38,19 @@ export const fetchFolders = (userId) => request(`/folders/user/${userId}`);
 
 export const fetchFolderFiles = (folderId) => request(`/folders/${folderId}/files`);
 
+export const createFolder = (name, parentId) =>
+  request('/folders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, parentId }),
+  });
+
+export const deleteFolder = (folderId) =>
+  request(`/folders/${folderId}`, { method: 'DELETE' });
+
+export const deleteFile = (fileId) =>
+  request(`/files/${fileId}`, { method: 'DELETE' });
+
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('image', file);
