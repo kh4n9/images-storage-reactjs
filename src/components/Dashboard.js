@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   AppBar,
@@ -48,13 +48,32 @@ import { foldersAPI, filesAPI } from "../services/api";
 import FileUpload from "./FileUpload";
 import FileGrid from "./FileGrid";
 import FolderList from "./FolderList";
+import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Try to get user information from context or fallback to cookie
+  const currentUser = useMemo(() => {
+    if (user) return user;
+    const stored = Cookies.get("user_data");
+    try {
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }, [user]);
+
   // Ensure we always work with a string user id
-  const userId =
-    typeof user?._id === "object" ? user?._id?.$oid : user?._id || user?.id;
+  const userId = useMemo(() => {
+    if (!currentUser) return null;
+    const id = currentUser.id || currentUser._id;
+    if (typeof id === "object") {
+      return id?.$oid || id?.toString();
+    }
+    return id;
+  }, [currentUser]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
